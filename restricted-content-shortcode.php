@@ -47,24 +47,19 @@ function wpse57819_shortcode_cb($args, $content=null)
     // if the user is logged in just show them the content.  You could check
     // rolls and capabilities here if you wanted as well
     if(is_user_logged_in())
-        return $content;
+        return '<button onclick="restrictedFunction();">TOGGLE RESTRICTED CONTENT</button><div style="height:auto;background:#DFDFDF;" class="restricted-content">'.$content.'</div><script type="text/javascript" language="javascript">function restrictedFunction() { var elems = document.getElementsByClassName("restricted-content"); for(var i = 0; i != elems.length; ++i) { if (elems[i].style.display === "none") { elems[i].style.display = "block"; } else { elems[i].style.display = "none"; } } }</script>';
+
 
     // If we're here, they aren't logged in, show them a message
     $defaults = array(
         // message show to non-logged in users
-        'msg'    => __('You must login to see this content.', 'wpse57819'),
-        // Login page link
-        'link'   => site_url('wp-login.php'),
-        // login link anchor text
-        'anchor' => __('Login.', 'wpse57819')
+        'msg'    => __('This section contains restricted content. Please contact the Administrator for more info.', 'wpse57819')
     );
     $args = wp_parse_args($args, $defaults);
 
     $msg = sprintf(
-        '<aside class="login-warning">%s <a href="%s">%s</a></aside>',
-        esc_html($args['msg']),
-        esc_url($args['link']),
-        esc_html($args['anchor'])
+        '<!-- %s -->',
+        esc_html($args['msg'])
     );
 
     return $msg;
